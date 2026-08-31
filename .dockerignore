@@ -1,0 +1,42 @@
+# Secrets — never let these into a build context or image layer.
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.test
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Version control and editor/OS noise
+.git
+.gitignore
+.gitattributes
+.vscode
+.idea
+.DS_Store
+
+# Dependencies and build output — reinstalled/rebuilt inside the image itself
+node_modules
+.next
+out
+/build
+/dist
+
+# Local-only data
+/public/uploads/*
+!/public/uploads/.gitkeep
+*.log
+npm-debug.log*
+*.tsbuildinfo
+
+# Docs and project-management files with no runtime purpose in the image
+README.md
+DESIGN.md
+PRODUCT.md
+.github
+
+# This skill's local working files, if present
+.impeccable

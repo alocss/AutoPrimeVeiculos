@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-surface text-ink-900 antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  ::selection {
+    background-color: #f8c9c9;
+    color: #6b1414;
+  }
+
+  :focus-visible {
+    outline: 2px solid #D32F2F;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Themed scrollbar so the browser chrome carries the brand, not the OS default */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f7f7f8;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #d5d5d9;
+    border-radius: 999px;
+    border: 3px solid #f7f7f8;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #b8b8be;
+  }
+  html {
+    scrollbar-color: #d5d5d9 #f7f7f8;
+    scrollbar-width: thin;
+  }
+
+  /* Tabular numerals for prices, KM, installments — figures must not jiggle */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  .filter-select {
+    @apply rounded-lg border border-surface-border bg-white px-3 py-2.5 text-sm text-ink-900 focus:border-primary-500;
+  }
+  .filter-input {
+    @apply w-20 rounded-lg border border-surface-border bg-white px-2.5 py-2 text-sm text-ink-900 focus:border-primary-500;
+  }
+  .form-input {
+    @apply w-full rounded-lg border border-surface-border bg-white px-3.5 py-3 text-base text-ink-900 placeholder:text-ink-400 focus:border-primary-500;
+  }
+}
+
+@layer utilities {
+  .prose-measure {
+    max-width: 70ch;
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, #eceef1 0%, #f6f7f8 50%, #eceef1 100%);
+    background-size: 800px 100%;
+    @apply animate-shimmer;
+  }
+}

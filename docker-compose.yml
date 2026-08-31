@@ -1,0 +1,55 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      # No weak fallback on purpose: Postgres refuses to start without a real
+      # POSTGRES_PASSWORD, forcing you to set one in .env instead of silently
+      # running with a guessable default.
+      POSTGRES_USER: ${POSTGRES_USER:-autoprime}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD no seu .env}
+      POSTGRES_DB: ${POSTGRES_DB:-autoprime}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-autoprime}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-autoprime}:${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD no seu .env}@db:5432/${POSTGRES_DB:-autoprime}?schema=public
+      ADMIN_SESSION_SECRET: ${ADMIN_SESSION_SECRET:?Defina ADMIN_SESSION_SECRET no seu .env}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?Defina ADMIN_EMAIL no seu .env}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:?Defina ADMIN_PASSWORD_HASH no seu .env (veja npm run admin:hash-password)}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+      NEXT_PUBLIC_WHATSAPP_NUMBER: ${NEXT_PUBLIC_WHATSAPP_NUMBER}
+      NEXT_PUBLIC_GA4_ID: ${NEXT_PUBLIC_GA4_ID:-}
+      NEXT_PUBLIC_META_PIXEL_ID: ${NEXT_PUBLIC_META_PIXEL_ID:-}
+    volumes:
+      - uploads_data:/app/public/uploads
+    expose:
+      - "3000"
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - uploads_data:/app/public/uploads:ro
+
+volumes:
+  db_data:
+  uploads_data:

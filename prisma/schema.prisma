@@ -1,0 +1,131 @@
+generator client {
+  provider      = "prisma-client-js"
+  // "native" covers local dev (Windows/macOS/glibc Linux); the musl target is required
+  // for the node:20-alpine image used by Dockerfile, which ships OpenSSL 3.x, not 1.1.
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum VehicleCondition {
+  ZERO_KM
+  SEMINOVO
+}
+
+enum Transmission {
+  MANUAL
+  AUTOMATICO
+  AUTOMATIZADO
+  CVT
+}
+
+enum FuelType {
+  FLEX
+  GASOLINA
+  DIESEL
+  HIBRIDO
+  ELETRICO
+}
+
+enum BodyType {
+  SUV
+  SEDAN
+  HATCH
+  PICKUP
+  MINIVAN
+  COUPE
+}
+
+enum VehicleBadge {
+  NONE
+  DESTAQUE
+  NOVO
+}
+
+enum VehicleStatus {
+  ACTIVE
+  SOLD
+}
+
+enum LeadType {
+  FINANCING
+  SELL
+  CONTACT
+  INTEREST
+}
+
+model Vehicle {
+  id           String            @id @default(cuid())
+  slug         String            @unique
+  brand        String
+  model        String
+  version      String
+  year         Int
+  modelYear    Int
+  km           Int
+  price        Int
+  condition    VehicleCondition
+  transmission Transmission
+  fuel         FuelType
+  bodyType     BodyType
+  color        String
+  doors        Int               @default(4)
+  plateEnding  Int
+  renavam      String
+  badge        VehicleBadge      @default(NONE)
+  featured     Boolean           @default(false)
+  status       VehicleStatus     @default(ACTIVE)
+  soldAt       DateTime?
+  description  String            @db.Text
+  optionals    String[]          @default([])
+  photos       VehiclePhoto[]
+  leads        Lead[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([brand, model])
+  @@index([condition])
+  @@index([bodyType])
+  @@index([price])
+  @@index([status])
+  @@index([soldAt])
+}
+
+model VehiclePhoto {
+  id        String  @id @default(cuid())
+  url       String
+  order     Int     @default(0)
+  vehicleId String
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@index([vehicleId])
+}
+
+model Lead {
+  type      LeadType
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  message   String?  @db.Text
+  payload   Json?
+  vehicleId String?
+  vehicle   Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+
+  @@index([vehicleId])
+  @@index([type])
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String?
+  quote     String   @db.Text
+  rating    Int      @default(5)
+  avatarUrl String?
+  createdAt DateTime @default(now())
+}
