@@ -6,6 +6,7 @@ import { toast } from "sonner";
 const STORAGE_KEY = "autoprime:compare";
 const MAX_COMPARE = 3;
 const listeners = new Set<() => void>();
+const EMPTY_COMPARE: string[] = [];
 let cache: string[] | null = null;
 
 function readFromStorage(): string[] {
@@ -35,7 +36,7 @@ function getSnapshot(): string[] {
 }
 
 function getServerSnapshot(): string[] {
-  return [];
+  return EMPTY_COMPARE;
 }
 
 export function toggleCompare(vehicleId: string) {

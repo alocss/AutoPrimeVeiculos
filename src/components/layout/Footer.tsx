@@ -39,8 +39,8 @@ export default function Footer() {
   return (
     <footer className="border-t border-surface-border bg-ink-900 text-white/80">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 gap-10 md:grid-cols-5">
-          <div className="col-span-2">
+        <div className="grid grid-cols-2 gap-10 md:grid-cols-[2fr_1fr_1fr_1fr_1.6fr]">
+          <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 font-display text-xl font-bold text-white">
               <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-500 text-base">
                 AP
@@ -101,7 +101,7 @@ export default function Footer() {
             </ul>
             <div className="mt-4 space-y-1 text-sm text-white/60">
               {SITE.hours.map((h) => (
-                <div key={h.day} className="flex justify-between gap-4">
+                <div key={h.day} className="grid grid-cols-[1fr_auto] gap-4 whitespace-nowrap">
                   <span>{h.day}</span>
                   <span className="tabular-nums">{h.time}</span>
                 </div>

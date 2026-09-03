@@ -3,7 +3,7 @@ const CSP_DIRECTIVES = [
   // 'unsafe-inline' is required for the GA4/Meta Pixel bootstrap <script> blocks and the
   // per-vehicle JSON-LD block in src/app/veiculos/[slug]/page.tsx; those are all
   // server-rendered from our own code, never from user input.
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://connect.facebook.net",
+  `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""} https://www.googletagmanager.com https://connect.facebook.net`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: https://placehold.co https://i.pravatar.cc https://www.google-analytics.com https://www.facebook.com",
   "font-src 'self' data:",

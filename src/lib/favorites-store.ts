@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 const STORAGE_KEY = "autoprime:favorites";
 const listeners = new Set<() => void>();
+const EMPTY_FAVORITES: string[] = [];
 let cache: string[] | null = null;
 
 function readFromStorage(): string[] {
@@ -33,7 +34,7 @@ function getSnapshot(): string[] {
 }
 
 function getServerSnapshot(): string[] {
-  return [];
+  return EMPTY_FAVORITES;
 }
 
 export function toggleFavorite(vehicleId: string) {

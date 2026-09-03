@@ -2,14 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { SearchBar } from "@/components/search/SearchBar";
-import { placeholderPhotoUrl } from "@/lib/placeholder";
 
 export function Hero({ models = [] }: { models?: string[] }) {
   return (
     <section className="relative overflow-hidden bg-ink-900">
       <div className="absolute inset-0">
         <Image
-          src={placeholderPhotoUrl("hero", "AutoPrime — veiculo em destaque", "1920x1080")}
+          src="/vehicles/hero-autoprime.png"
           alt="Veículo em destaque no showroom AutoPrime"
           fill
           priority
