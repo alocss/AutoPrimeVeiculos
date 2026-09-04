@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { SITE } from "@/lib/constants";
-import { placeholderPhotoUrl } from "@/lib/placeholder";
 
 export const metadata: Metadata = {
   title: "Sobre nós",
@@ -46,7 +45,7 @@ export default function SobreNosPage() {
 
         <div className="relative aspect-[4/3] overflow-hidden rounded-card">
           <Image
-            src={placeholderPhotoUrl("sobre-nos", "Equipe AutoPrime Veiculos", "900x700")}
+            src="/brands/Clientes.png"
             alt={`Equipe da ${SITE.name} no showroom`}
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
