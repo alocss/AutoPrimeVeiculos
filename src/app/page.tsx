@@ -2,10 +2,10 @@ import { Hero } from "@/components/home/Hero";
 import { BrandsCarousel } from "@/components/home/BrandsCarousel";
 import { FeaturedGrid } from "@/components/home/FeaturedGrid";
 import { ConditionsSection } from "@/components/home/ConditionsSection";
-import { CategoriesSection } from "@/components/home/CategoriesSection";
+import { VehiclesCarousel } from "@/components/home/VehiclesCarousel";
 import { Testimonials } from "@/components/home/Testimonials";
 import { WhyUs } from "@/components/home/WhyUs";
-import { getFeaturedVehicles, getFilterFacets } from "@/lib/vehicles";
+import { getFeaturedVehicles, getLatestVehicles, getFilterFacets } from "@/lib/vehicles";
 import { prisma } from "@/lib/prisma";
 
 // Forced dynamic (rather than static + ISR) so this page never needs a live database
@@ -13,8 +13,9 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [featured, testimonials, facets] = await Promise.all([
+  const [featured, latest, testimonials, facets] = await Promise.all([
     getFeaturedVehicles(8),
+    getLatestVehicles(10),
     prisma.testimonial.findMany({ orderBy: { createdAt: "desc" }, take: 6 }),
     getFilterFacets(),
   ]);
@@ -25,7 +26,7 @@ export default async function HomePage() {
       <BrandsCarousel />
       <FeaturedGrid vehicles={featured} />
       <ConditionsSection />
-      <CategoriesSection />
+      <VehiclesCarousel vehicles={latest} />
       <Testimonials testimonials={testimonials} />
       <WhyUs />
     </>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { SITE } from "@/lib/constants";
 
@@ -41,12 +42,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-10 md:grid-cols-[2fr_1fr_1fr_1fr_1.6fr]">
           <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 font-display text-xl font-bold text-white">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-500 text-base">
-                AP
-              </span>
-              {SITE.name}
-            </div>
+            <Image src="/brands/logo.png" alt={SITE.name} width={1241} height={721} className="h-20 w-auto" />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/60">{SITE.tagline}</p>
             <div className="mt-5 flex gap-3">
               <a

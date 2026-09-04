@@ -79,6 +79,15 @@ export async function getFeaturedVehicles(limit = 8) {
   });
 }
 
+export async function getLatestVehicles(limit = 10) {
+  return prisma.vehicle.findMany({
+    where: { status: "ACTIVE" },
+    orderBy: { createdAt: "desc" },
+    include: { photos: { orderBy: { order: "asc" }, take: 1 } },
+    take: limit,
+  });
+}
+
 export async function getVehicleBySlug(slug: string) {
   return prisma.vehicle.findUnique({
     where: { slug },

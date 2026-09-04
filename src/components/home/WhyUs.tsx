@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { WHY_US } from "@/lib/constants";
-import { placeholderPhotoUrl } from "@/lib/placeholder";
 
 export function WhyUs() {
   return (
@@ -8,8 +7,8 @@ export function WhyUs() {
       <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
         <div className="relative aspect-[4/3] overflow-hidden rounded-card">
           <Image
-            src={placeholderPhotoUrl("whyus", "Equipe AutoPrime na revisao", "900x700")}
-            alt="Equipe técnica AutoPrime revisando um veículo"
+            src="/brands/Clientes.png"
+            alt="Clientes satisfeitos AutoPrime"
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover"

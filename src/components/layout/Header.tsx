@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -37,9 +38,7 @@ export default function Header({ models = [] }: { models?: string[] }) {
     <header className="sticky top-0 z-40 border-b border-surface-border bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2 font-display text-xl font-bold tracking-tighter text-ink-900">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-500 text-base text-white">
-            AP
-          </span>
+          <Image src="/brands/logo-icon.png" alt="" width={483} height={435} priority className="h-11 w-auto" />
           {SITE.shortName}
         </Link>
 

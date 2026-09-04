@@ -36,6 +36,7 @@ export const BRANDS = [
   "Chevrolet",
   "Volvo",
   "Peugeot",
+  "Ford",
 ] as const;
 
 export const BODY_TYPE_LABEL: Record<string, string> = {

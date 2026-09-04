@@ -51,10 +51,15 @@ const config: Config = {
           "0%": { backgroundPosition: "-400px 0" },
           "100%": { backgroundPosition: "400px 0" },
         },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.6s cubic-bezier(0.16,1,0.3,1) both",
         shimmer: "shimmer 1.6s linear infinite",
+        marquee: "marquee 30s linear infinite",
       },
     },
   },
