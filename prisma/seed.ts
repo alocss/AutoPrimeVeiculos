@@ -41,7 +41,7 @@ function photosFor(seed: string) {
   const [bg, fg] = PALETTE[hashSeed(seed) % PALETTE.length];
   return PHOTO_ANGLES.map((angle, i) => ({
     order: i,
-    url: `https://placehold.co/1200x800/${bg}/${fg}?text=${encodeURIComponent(`${seed}\n${angle}`)}&font=roboto`,
+    url: `https://placehold.co/1200x800/${bg}/${fg}.png?text=${encodeURIComponent(`${seed}\n${angle}`)}&font=roboto`,
   }));
 }
 
