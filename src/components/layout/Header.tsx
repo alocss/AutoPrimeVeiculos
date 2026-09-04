@@ -74,6 +74,19 @@ export default function Header({ models = [] }: { models?: string[] }) {
           </Link>
 
           <Link
+            href="/admin/login"
+            className="hidden h-10 w-10 items-center justify-center rounded-full text-ink-600 transition-colors hover:bg-surface-muted hover:text-primary-600 sm:flex"
+            aria-label="Área do lojista"
+            title="Área do lojista"
+          >
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" />
+              <path d="M10 17l5-5-5-5" />
+              <path d="M15 12H3" />
+            </svg>
+          </Link>
+
+          <Link
             href="/estoque"
             className="hidden rounded-lg bg-primary-500 px-4 py-2.5 text-[15px] font-semibold text-white shadow-card transition-all hover:bg-primary-600 sm:inline-flex"
           >
@@ -111,6 +124,13 @@ export default function Header({ models = [] }: { models?: string[] }) {
             className="block py-2.5 text-[15px] font-medium text-ink-900"
           >
             Favoritos {count > 0 ? `(${count})` : ""}
+          </Link>
+          <Link
+            href="/admin/login"
+            onClick={() => setOpen(false)}
+            className="block py-2.5 text-[15px] font-medium text-ink-900"
+          >
+            Área do lojista
           </Link>
         </nav>
       ) : null}
