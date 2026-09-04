@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllVehicleSlugs } from "@/lib/vehicles";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 // No live database at `docker build` time by design (see Dockerfile / README) — this
 // route renders on request instead of being frozen into the build output.

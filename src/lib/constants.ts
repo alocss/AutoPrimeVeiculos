@@ -3,7 +3,7 @@ export const SITE = {
   shortName: "AutoPrime",
   tagline: "Seminovos e 0km com procedência, do jeito que deveria ser.",
   phoneDisplay: "(11) 99999-9999",
-  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "5511999999999",
+  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "5511999999999",
   email: "contato@autoprimeveiculos.com.br",
   address: {
     street: "Av. das Concessionárias, 1200",
