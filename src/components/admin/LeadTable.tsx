@@ -109,7 +109,7 @@ export function LeadTable({ leads }: { leads: LeadRow[] }) {
                   <tr>
                     <td className="whitespace-nowrap p-3 tabular-nums text-ink-600">{lead.createdAtLabel}</td>
                     <td className="p-3">
-                      <Badge tone={TYPE_TONE[lead.type]}>{LEAD_TYPE_LABEL[lead.type]}</Badge>
+                      <Badge tone={TYPE_TONE[lead.type] ?? "neutral"}>{LEAD_TYPE_LABEL[lead.type] ?? lead.type}</Badge>
                     </td>
                     <td className="p-3 font-medium text-ink-900">{lead.name}</td>
                     <td className="p-3 text-ink-600">
