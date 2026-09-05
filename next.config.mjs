@@ -5,7 +5,7 @@ const CSP_DIRECTIVES = [
   // server-rendered from our own code, never from user input.
   `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""} https://www.googletagmanager.com https://connect.facebook.net`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: https://placehold.co https://i.pravatar.cc https://www.google-analytics.com https://www.facebook.com",
+  "img-src 'self' data: https://placehold.co https://i.pravatar.cc https://www.google-analytics.com https://www.facebook.com https://*.public.blob.vercel-storage.com",
   "font-src 'self' data:",
   "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://connect.facebook.net",
   "frame-src https://www.google.com",
@@ -33,6 +33,7 @@ const nextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "placehold.co" },
       { protocol: "https", hostname: "i.pravatar.cc" },
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
     ],
   },
   eslint: {

@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
 import { randomUUID } from "crypto";
 import { requireAdmin } from "@/lib/auth";
+import { saveUploadedFile } from "@/lib/storage";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE_BYTES = 8 * 1024 * 1024;
@@ -24,13 +23,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Arquivo muito grande (máx. 8MB)." }, { status: 400 });
   }
 
-  const uploadsDir = path.join(process.cwd(), "public", "uploads");
-  await mkdir(uploadsDir, { recursive: true });
-
   const extension = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
   const filename = `${randomUUID()}.${extension}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
-  await writeFile(path.join(uploadsDir, filename), buffer);
 
-  return NextResponse.json({ url: `/uploads/${filename}` }, { status: 201 });
+  try {
+    const url = await saveUploadedFile(file, "vehicles", filename);
+    return NextResponse.json({ url }, { status: 201 });
+  } catch (error) {
+    console.error("upload failed", error);
+    return NextResponse.json({ error: "Falha ao salvar o arquivo. Tente novamente." }, { status: 500 });
+  }
 }

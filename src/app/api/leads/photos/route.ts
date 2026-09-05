@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
 import { randomUUID } from "crypto";
 import { getClientIp, rateLimit } from "@/lib/rate-limit";
 import { logSecurityEvent } from "@/lib/security-log";
+import { saveUploadedFile } from "@/lib/storage";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE_BYTES = 8 * 1024 * 1024;
@@ -44,17 +43,16 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  const uploadsDir = path.join(process.cwd(), "public", "uploads", "sell");
-  await mkdir(uploadsDir, { recursive: true });
-
-  const urls: string[] = [];
-  for (const file of files) {
-    const extension = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
-    const filename = `${randomUUID()}.${extension}`;
-    const buffer = Buffer.from(await file.arrayBuffer());
-    await writeFile(path.join(uploadsDir, filename), buffer);
-    urls.push(`/uploads/sell/${filename}`);
+  try {
+    const urls: string[] = [];
+    for (const file of files) {
+      const extension = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
+      const filename = `${randomUUID()}.${extension}`;
+      urls.push(await saveUploadedFile(file, "sell", filename));
+    }
+    return NextResponse.json({ urls }, { status: 201 });
+  } catch (error) {
+    console.error("lead photo upload failed", error);
+    return NextResponse.json({ error: "Falha ao salvar as fotos. Tente novamente." }, { status: 500 });
   }
-
-  return NextResponse.json({ urls }, { status: 201 });
 }
