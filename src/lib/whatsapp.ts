@@ -24,3 +24,10 @@ export function whatsappVehicleInterestLink(vehicle: VehicleLike): string {
 export function whatsappGeneralLink(): string {
   return whatsappLink(`Olá! Vim pelo site da ${SITE.name} e gostaria de mais informações.`);
 }
+
+export function whatsappReplyToLeadLink(name: string, phone: string): string {
+  const digits = phone.replace(/\D/g, "");
+  const withCountryCode = digits.startsWith("55") ? digits : `55${digits}`;
+  const params = new URLSearchParams({ text: `Olá, ${name}! Aqui é da ${SITE.name}, vi sua mensagem no site.` });
+  return `https://wa.me/${withCountryCode}?${params.toString()}`;
+}

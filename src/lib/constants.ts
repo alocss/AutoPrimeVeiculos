@@ -74,6 +74,13 @@ export const BADGE_LABEL: Record<string, string> = {
   NONE: "",
 };
 
+export const LEAD_TYPE_LABEL: Record<string, string> = {
+  FINANCING: "Financiamento",
+  SELL: "Venda de veículo",
+  CONTACT: "Contato",
+  INTEREST: "Interesse em veículo",
+};
+
 // Illustrative simulator rate — not a real bank offer. Surfaced with a disclaimer everywhere it renders.
 export const FINANCING = {
   defaultAnnualRatePct: 22.8,

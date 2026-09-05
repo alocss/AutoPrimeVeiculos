@@ -8,6 +8,7 @@ import { SITE } from "@/lib/constants";
 const LINKS = [
   { href: "/admin", label: "Estoque" },
   { href: "/admin/vendas", label: "Vendas" },
+  { href: "/admin/leads", label: "Leads" },
   { href: "/admin/veiculos/novo", label: "Novo veículo" },
 ];
 
