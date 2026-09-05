@@ -53,6 +53,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ urls }, { status: 201 });
   } catch (error) {
     console.error("lead photo upload failed", error);
-    return NextResponse.json({ error: "Falha ao salvar as fotos. Tente novamente." }, { status: 500 });
+    // TEMP DEBUG: surface the real error to diagnose a production-only failure — revert before merging.
+    return NextResponse.json(
+      { error: "Falha ao salvar as fotos. Tente novamente.", debug: error instanceof Error ? error.message : String(error) },
+      { status: 500 },
+    );
   }
 }
