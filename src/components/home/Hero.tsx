@@ -21,7 +21,7 @@ export function Hero({ models = [] }: { models?: string[] }) {
       <div className="relative mx-auto flex max-w-7xl flex-col px-4 pb-24 pt-16 sm:px-6 sm:pt-20 lg:px-8 lg:pt-28">
         <div className="max-w-xl animate-fade-up">
           <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tighter text-white sm:text-5xl lg:text-6xl">
-            Seu veículo está aqui
+            Encontre o carro que combina com você
           </h1>
           <p className="mt-5 max-w-md text-base leading-relaxed text-white/70 sm:text-lg">
             Seminovos e 0km revisados, financiamento simulado em segundos e um clique até o
