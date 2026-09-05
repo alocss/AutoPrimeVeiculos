@@ -5,7 +5,8 @@ type SecurityEvent =
   | "admin_login_success"
   | "admin_login_failure"
   | "admin_login_rate_limited"
-  | "lead_rate_limited";
+  | "lead_rate_limited"
+  | "lead_photo_rate_limited";
 
 export function logSecurityEvent(event: SecurityEvent, meta: Record<string, string | number | undefined>) {
   const entry = {

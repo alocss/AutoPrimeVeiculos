@@ -7,8 +7,11 @@ import { toast } from "sonner";
 import { sellFormSchema, type SellFormValues } from "@/lib/validations";
 import { BRANDS } from "@/lib/constants";
 
+const MAX_PHOTOS = 6;
+
 export function SellForm() {
-  const [photoNames, setPhotoNames] = useState<string[]>([]);
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [uploading, setUploading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -16,7 +19,28 @@ export function SellForm() {
     formState: { errors, isSubmitting },
   } = useForm<SellFormValues>({ resolver: zodResolver(sellFormSchema) });
 
+  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setPhotos(Array.from(e.target.files ?? []).slice(0, MAX_PHOTOS));
+  }
+
   async function onSubmit(values: SellFormValues) {
+    let photoUrls: string[] = [];
+
+    if (photos.length > 0) {
+      setUploading(true);
+      const formData = new FormData();
+      photos.forEach((file) => formData.append("files", file));
+      const uploadRes = await fetch("/api/leads/photos", { method: "POST", body: formData });
+      setUploading(false);
+
+      if (!uploadRes.ok) {
+        const data = await uploadRes.json().catch(() => ({}));
+        toast.error(data.error ?? "Não conseguimos enviar as fotos. Tente novamente.");
+        return;
+      }
+      ({ urls: photoUrls } = await uploadRes.json());
+    }
+
     const res = await fetch("/api/leads", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -26,14 +50,14 @@ export function SellForm() {
         email: values.email,
         phone: values.phone,
         message: `${values.brand} ${values.model} ${values.year}, ${values.km} km, estado: ${values.condition}`,
-        payload: { ...values, photoCount: photoNames.length },
+        payload: { ...values, photoUrls },
       }),
     });
 
     if (res.ok) {
       toast.success("Recebemos seu veículo! Vamos avaliar e retornar em até 24h úteis.");
       reset();
-      setPhotoNames([]);
+      setPhotos([]);
     } else {
       toast.error("Não conseguimos enviar sua avaliação. Tente novamente.");
     }
@@ -87,16 +111,16 @@ export function SellForm() {
       </label>
 
       <label className="sm:col-span-2">
-        <span className="mb-1.5 block text-sm font-medium text-ink-900">Fotos do veículo (opcional)</span>
+        <span className="mb-1.5 block text-sm font-medium text-ink-900">Fotos do veículo (opcional, até {MAX_PHOTOS})</span>
         <input
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/webp"
           multiple
-          onChange={(e) => setPhotoNames(Array.from(e.target.files ?? []).map((f) => f.name))}
+          onChange={handlePhotoChange}
           className="form-input file:mr-3 file:rounded-md file:border-0 file:bg-primary-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary-700"
         />
-        {photoNames.length > 0 ? (
-          <p className="mt-1.5 text-xs text-ink-600">{photoNames.length} arquivo(s) selecionado(s)</p>
+        {photos.length > 0 ? (
+          <p className="mt-1.5 text-xs text-ink-600">{photos.length} arquivo(s) selecionado(s)</p>
         ) : null}
       </label>
 
@@ -118,10 +142,10 @@ export function SellForm() {
 
       <button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSubmitting || uploading}
         className="mt-2 rounded-lg bg-primary-500 px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-primary-600 disabled:opacity-60 sm:col-span-2"
       >
-        {isSubmitting ? "Enviando..." : "Solicitar avaliação gratuita"}
+        {uploading ? "Enviando fotos..." : isSubmitting ? "Enviando..." : "Solicitar avaliação gratuita"}
       </button>
     </form>
   );

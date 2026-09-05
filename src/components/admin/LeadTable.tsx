@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import type { LeadType } from "@prisma/client";
 import { Badge } from "@/components/ui/Badge";
@@ -39,6 +40,9 @@ const PAYLOAD_FIELD_LABEL: Record<string, string> = {
   condition: "Estado de conservação",
   photoCount: "Fotos anexadas",
 };
+
+// Already shown in the row itself — redundant to repeat in the expanded details.
+const REDUNDANT_PAYLOAD_KEYS = new Set(["photoUrls", "name", "email", "phone"]);
 
 const FILTERS: { value: "ALL" | LeadType; label: string }[] = [
   { value: "ALL", label: "Todos" },
@@ -102,7 +106,13 @@ export function LeadTable({ leads }: { leads: LeadRow[] }) {
           <tbody className="divide-y divide-surface-border">
             {filtered.map((lead) => {
               const expanded = expandedId === lead.id;
-              const hasDetails = lead.payload && Object.keys(lead.payload).length > 0;
+              const photoUrls = Array.isArray(lead.payload?.photoUrls)
+                ? (lead.payload!.photoUrls as unknown[]).filter((u): u is string => typeof u === "string")
+                : [];
+              const otherPayloadEntries = lead.payload
+                ? Object.entries(lead.payload).filter(([key]) => !REDUNDANT_PAYLOAD_KEYS.has(key))
+                : [];
+              const hasDetails = otherPayloadEntries.length > 0 || photoUrls.length > 0;
 
               return (
                 <Fragment key={lead.id}>
@@ -144,25 +154,47 @@ export function LeadTable({ leads }: { leads: LeadRow[] }) {
                             onClick={() => setExpandedId(expanded ? null : lead.id)}
                             className="text-sm font-medium text-ink-600 hover:text-primary-600"
                           >
-                            {expanded ? "Ocultar" : "Detalhes"}
+                            {expanded ? "Ocultar" : photoUrls.length > 0 ? `Detalhes (${photoUrls.length} foto${photoUrls.length > 1 ? "s" : ""})` : "Detalhes"}
                           </button>
                         ) : null}
                       </div>
                     </td>
                   </tr>
-                  {expanded && lead.payload ? (
+                  {expanded ? (
                     <tr>
                       <td colSpan={6} className="bg-surface-muted p-4">
-                        <dl className="grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-3">
-                          {Object.entries(lead.payload).map(([key, value]) => (
-                            <div key={key}>
-                              <dt className="text-xs font-semibold uppercase text-ink-400">
-                                {PAYLOAD_FIELD_LABEL[key] ?? key}
-                              </dt>
-                              <dd className="text-sm text-ink-900">{String(value)}</dd>
+                        {photoUrls.length > 0 ? (
+                          <div className="mb-4">
+                            <p className="mb-2 text-xs font-semibold uppercase text-ink-400">
+                              Fotos enviadas pelo cliente
+                            </p>
+                            <div className="flex flex-wrap gap-3">
+                              {photoUrls.map((url) => (
+                                <a
+                                  key={url}
+                                  href={url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="relative block h-24 w-32 shrink-0 overflow-hidden rounded-md border border-surface-border bg-white"
+                                >
+                                  <Image src={url} alt="Foto enviada pelo cliente" fill sizes="128px" className="object-cover" />
+                                </a>
+                              ))}
                             </div>
-                          ))}
-                        </dl>
+                          </div>
+                        ) : null}
+                        {otherPayloadEntries.length > 0 ? (
+                          <dl className="grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-3">
+                            {otherPayloadEntries.map(([key, value]) => (
+                              <div key={key}>
+                                <dt className="text-xs font-semibold uppercase text-ink-400">
+                                  {PAYLOAD_FIELD_LABEL[key] ?? key}
+                                </dt>
+                                <dd className="text-sm text-ink-900">{String(value)}</dd>
+                              </div>
+                            ))}
+                          </dl>
+                        ) : null}
                       </td>
                     </tr>
                   ) : null}
