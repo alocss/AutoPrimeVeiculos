@@ -87,7 +87,7 @@ export default function Footer() {
 
           <div>
             <h3 className="text-sm font-semibold text-white">Contato</h3>
-            <ul className="mt-4 space-y-2.5 text-sm text-white/60">
+            <ul className="mt-4 space-y-2.5 break-words text-sm text-white/60">
               <li>{SITE.address.street}</li>
               <li>
                 {SITE.address.neighborhood} — {SITE.address.city}/{SITE.address.state}
@@ -97,7 +97,7 @@ export default function Footer() {
             </ul>
             <div className="mt-4 space-y-1 text-sm text-white/60">
               {SITE.hours.map((h) => (
-                <div key={h.day} className="grid grid-cols-[1fr_auto] gap-4 whitespace-nowrap">
+                <div key={h.day} className="flex flex-wrap justify-between gap-x-4">
                   <span>{h.day}</span>
                   <span className="tabular-nums">{h.time}</span>
                 </div>
